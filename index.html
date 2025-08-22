@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>TOTP QR Generator</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body>
+  <h2>Generate TOTP QR Code</h2>
+  
+  <label>Account Name: <input type="text" id="account" value="ankur.verma@hotmail.com"></label><br><br>
+  <label>Issuer: <input type="text" id="issuer" value="MyCompany"></label><br><br>
+  <label>Secret (Base32): <input type="text" id="secret" value="JBSWY3DPEHPK3PXP"></label><br><br>
+  
+  <button onclick="generateQR()">Generate QR</button>
+  <div id="qrcode" style="margin-top:20px;"></div>
+
+  <script>
+    function generateQR() {
+      const account = encodeURIComponent(document.getElementById("account").value);
+      const issuer = encodeURIComponent(document.getElementById("issuer").value);
+      const secret = document.getElementById("secret").value;
+
+      // Construct otpauth URI
+      const otpURI = `otpauth://totp/${issuer}:${account}?secret=${secret}&issuer=${issuer}&algorithm=SHA1&digits=6&period=30`;
+
+      document.getElementById("qrcode").innerHTML = "";
+      new QRCode(document.getElementById("qrcode"), {
+        text: otpURI,
+        width: 200,
+        height: 200
+      });
+    }
+  </script>
+</body>
+</html>
